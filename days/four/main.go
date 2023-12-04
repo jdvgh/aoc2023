@@ -14,8 +14,10 @@ type Card struct {
 	id               int
 	winningNumbers   []int
 	numbersScratched []int
+	hits             int
 }
 
+var lut map[int]Card
 var lut2 = []int{0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512}
 
 func parseNumbers(numberString string) []int {
@@ -91,6 +93,27 @@ func Dayfour(in DayfourInput) int {
 	}
 
 	return sum
+}
+func DayfourPartTwo(in DayfourInput) int {
+	lut := make(map[int]Card, len(in.a))
+	var cards []Card
+	for _, line := range in.a {
+		card := parseCard(line)
+		hits := countHits(card)
+		card.hits = hits
+		lut[card.id] = card
+		cards = append(cards, card)
+	}
+	for j := 0; j < len(cards); j++ {
+		card := cards[j]
+		if card.hits > 0 {
+			for i := card.id + 1; i <= card.id+card.hits; i++ {
+				cards = append(cards, lut[i])
+			}
+		}
+	}
+
+	return len(cards)
 }
 func main() {
 }
