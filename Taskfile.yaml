@@ -1,0 +1,48 @@
+version: 3
+tasks:
+  tmp:
+    cmds:
+      - mkdir -p days/{{.AOC}}
+      - |
+        cat << EOF > days/{{.AOC}}/main.go 
+        package main
+        type Day{{.AOC}}Input struct {
+          a int
+        }
+        func Day{{.AOC}}(in Day{{.AOC}}Input) int {
+          return 0
+        }
+        func main() {
+        }
+        EOF
+      - |
+        cat << EOF > days/{{.AOC}}/main_test.go
+        package main
+        import (
+          "fmt"
+          "testing"
+          "reflect"
+        )
+        func TestDay{{.AOC}}(t *testing.T) {
+          var tests = []struct {
+          in  Day{{.AOC}}Input
+          res int
+          }{
+            { Day{{.AOC}}Input{0}, 2},
+          }
+          for _, tt := range tests {
+            testname := fmt.Sprintf("Day{{.AOC}}(%v) - wanted: %v", tt.in, tt.res)
+              t.Run(testname, func(t *testing.T) {
+                ans := Day{{.AOC}}(tt.in)
+                if !reflect.DeepEqual(ans, tt.res) {
+                  t.Errorf("%v got: %v \n", testname, ans)
+                }
+              })
+            }
+        }
+        EOF
+    vars:
+      AOC: one
+
+
+
