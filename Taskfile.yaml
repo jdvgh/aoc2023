@@ -1,5 +1,8 @@
 version: 3
 tasks:
+  golang:
+    cmds:
+      - docker run --memory="14g" --cpus="14" --rm -it  -v $(pwd):/workspace --workdir /workspace golang:1.21.4 bash
   tmp:
     cmds:
       - mkdir -p days/{{.AOC}}
